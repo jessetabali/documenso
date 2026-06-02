@@ -1,0 +1,2 @@
+-- RenameIndex
+ALTER INDEX "AttachmentFieldUpload_documentDataId_envelopeId_fieldId_recipie" RENAME TO "AttachmentFieldUpload_documentDataId_envelopeId_fieldId_rec_idx";
