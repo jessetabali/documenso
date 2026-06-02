@@ -1664,6 +1664,10 @@ msgstr "署名者の追加中にエラーが発生しました。"
 msgid "An error occurred while adding the fields."
 msgstr "フィールドの追加中にエラーが発生しました。"
 
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
+msgid "An error occurred while attaching the file."
+msgstr ""
+
 #: apps/remix/app/components/general/document/document-edit-form.tsx
 msgid "An error occurred while auto-saving the document settings."
 msgstr "ドキュメント設定の自動保存中にエラーが発生しました。"
@@ -1748,6 +1752,10 @@ msgstr "テンプレートの移動中にエラーが発生しました。"
 msgid "An error occurred while rejecting the document. Please try again."
 msgstr "ドキュメントの却下処理中にエラーが発生しました。もう一度お試しください。"
 
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
+msgid "An error occurred while removing the attachment."
+msgstr ""
+
 #: apps/remix/app/components/general/document-signing/document-signing-checkbox-field.tsx
 #: apps/remix/app/components/general/document-signing/document-signing-date-field.tsx
 #: apps/remix/app/components/general/document-signing/document-signing-dropdown-field.tsx
@@ -1779,6 +1787,7 @@ msgstr "文書の送信中にエラーが発生しました。"
 msgid "An error occurred while sending your confirmation email"
 msgstr "確認メールの送信中にエラーが発生しました"
 
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
 #: apps/remix/app/components/general/document-signing/document-signing-checkbox-field.tsx
 #: apps/remix/app/components/general/document-signing/document-signing-date-field.tsx
 #: apps/remix/app/components/general/document-signing/document-signing-dropdown-field.tsx
@@ -2107,15 +2116,45 @@ msgstr "補助中"
 msgid "At least one signature type must be enabled"
 msgstr "少なくとも 1 つの署名タイプを有効にする必要があります"
 
+#: apps/remix/app/components/dialogs/sign-field-attachment-dialog.tsx
+msgid "Attach"
+msgstr ""
+
+#: apps/remix/app/components/general/envelope-editor/envelope-editor-fields-drag-drop.tsx
+msgid "Attachment"
+msgstr ""
+
+#. placeholder {0}: index + 1
+#: apps/remix/app/components/general/document-signing/document-signing-page-view-v2.tsx
+msgid "Attachment {0}"
+msgstr ""
+
 #: apps/remix/app/components/general/document/document-attachments-popover.tsx
 #: apps/remix/app/components/general/document/embedded-editor-attachment-popover.tsx
 msgid "Attachment added successfully."
 msgstr "添付ファイルを追加しました。"
 
+#: apps/remix/app/components/general/document-signing/document-signing-page-view-v2.tsx
+msgid "Attachment included - PDF file"
+msgstr ""
+
 #: apps/remix/app/components/general/document/document-attachments-popover.tsx
 #: apps/remix/app/components/general/document/embedded-editor-attachment-popover.tsx
 msgid "Attachment removed successfully."
 msgstr "添付ファイルを削除しました。"
+
+#: apps/remix/app/components/general/envelope-editor/envelope-editor-fields-page.tsx
+msgid "Attachment Settings"
+msgstr ""
+
+#: packages/lib/utils/fields.ts
+#: packages/ui/primitives/document-flow/types.ts
+msgid "Attachment Upload"
+msgstr ""
+
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
+msgid "Attachment uploaded"
+msgstr ""
 
 #: apps/remix/app/components/general/document-signing/document-signing-attachments-popover.tsx
 #: apps/remix/app/components/general/document-signing/document-signing-attachments-popover.tsx
@@ -2440,6 +2479,7 @@ msgstr "メンバーが見つかりませんか？"
 #: apps/remix/app/components/dialogs/passkey-create-dialog.tsx
 #: apps/remix/app/components/dialogs/public-profile-template-manage-dialog.tsx
 #: apps/remix/app/components/dialogs/session-logout-all-dialog.tsx
+#: apps/remix/app/components/dialogs/sign-field-attachment-dialog.tsx
 #: apps/remix/app/components/dialogs/sign-field-checkbox-dialog.tsx
 #: apps/remix/app/components/dialogs/sign-field-email-dialog.tsx
 #: apps/remix/app/components/dialogs/sign-field-initials-dialog.tsx
@@ -2675,6 +2715,10 @@ msgstr "クリックして署名用リンクをコピーし、受信者に送信
 #: apps/remix/app/components/general/envelope-signing/envelope-signer-page-renderer.tsx
 msgid "Click to insert field"
 msgstr "クリックしてフィールドを挿入"
+
+#: apps/remix/app/components/dialogs/sign-field-attachment-dialog.tsx
+msgid "Click to select a PDF file"
+msgstr ""
 
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl.settings.sso.tsx
 msgid "Client ID"
@@ -5099,6 +5143,8 @@ msgstr "封筒を更新しました"
 #: apps/remix/app/components/dialogs/webhook-create-dialog.tsx
 #: apps/remix/app/components/embed/multisign/multi-sign-document-signing-view.tsx
 #: apps/remix/app/components/embed/multisign/multi-sign-document-signing-view.tsx
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
 #: apps/remix/app/components/general/document-signing/document-signing-auto-sign.tsx
 #: apps/remix/app/components/general/document-signing/document-signing-checkbox-field.tsx
 #: apps/remix/app/components/general/document-signing/document-signing-checkbox-field.tsx
@@ -5373,6 +5419,11 @@ msgstr "Webhook の更新に失敗しました"
 msgid "Failed to upload CSV. Please check the file format and try again."
 msgstr "CSV のアップロードに失敗しました。ファイル形式を確認してから、もう一度お試しください。"
 
+#: apps/remix/app/components/dialogs/sign-field-attachment-dialog.tsx
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
+msgid "Failed to upload the file. Please try again."
+msgstr ""
+
 #: packages/email/templates/bulk-send-complete.tsx
 msgid "Failed: {failedCount}"
 msgstr "失敗: {failedCount}"
@@ -5392,6 +5443,7 @@ msgid "Field character limit"
 msgstr "フィールドの文字数制限"
 
 #: apps/remix/app/components/forms/editor/editor-field-generic-field-forms.tsx
+#: packages/ui/primitives/document-flow/field-items-advanced-settings/attachment-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/date-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/email-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/initials-field.tsx
@@ -5508,6 +5560,7 @@ msgid "Folder updated successfully"
 msgstr "フォルダは正常に更新されました"
 
 #: apps/remix/app/components/forms/editor/editor-field-generic-field-forms.tsx
+#: packages/ui/primitives/document-flow/field-items-advanced-settings/attachment-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/date-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/email-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/initials-field.tsx
@@ -7307,6 +7360,11 @@ msgstr "一度にアップロードできるファイルは1件のみです"
 msgid "Only PDF files are allowed"
 msgstr "PDFファイルのみアップロードできます"
 
+#: apps/remix/app/components/dialogs/sign-field-attachment-dialog.tsx
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
+msgid "Only PDF files are supported. Please select a PDF file."
+msgstr ""
+
 #: apps/remix/app/components/general/generic-error-layout.tsx
 #: apps/remix/app/components/general/generic-error-layout.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id._layout.tsx
@@ -8188,6 +8246,7 @@ msgstr "再登録"
 msgid "Re-register Email Domain"
 msgstr "メールドメインを再登録"
 
+#: packages/ui/primitives/document-flow/field-items-advanced-settings/attachment-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/checkbox-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/dropdown-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx
@@ -8537,6 +8596,10 @@ msgstr "リマインダー"
 msgid "Remove"
 msgstr "削除"
 
+#: apps/remix/app/components/dialogs/sign-field-attachment-dialog.tsx
+msgid "Remove attachment"
+msgstr ""
+
 #: apps/remix/app/components/tables/organisation-email-domains-table.tsx
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl.settings.email-domains.$id.tsx
 msgid "Remove email domain"
@@ -8640,6 +8703,7 @@ msgstr "パスキーを必須にする"
 msgid "Require password"
 msgstr "パスワードを必須にする"
 
+#: packages/ui/primitives/document-flow/field-items-advanced-settings/attachment-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/checkbox-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/dropdown-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx
@@ -9002,6 +9066,10 @@ msgstr "このフォルダの移動先を選択してください。"
 #: apps/remix/app/components/dialogs/document-move-to-folder-dialog.tsx
 msgid "Select a folder to move this document to."
 msgstr "このドキュメントを移動するフォルダを選択してください。"
+
+#: apps/remix/app/components/dialogs/sign-field-attachment-dialog.tsx
+msgid "Select a PDF file to attach to this document."
+msgstr ""
 
 #: apps/remix/app/components/dialogs/organisation-create-dialog.tsx
 msgid "Select a plan"
@@ -11829,6 +11897,10 @@ msgstr "テンプレートの既定ドキュメントの代わりに使用する
 msgid "Upload and Process"
 msgstr "アップロードして処理"
 
+#: apps/remix/app/components/dialogs/sign-field-attachment-dialog.tsx
+msgid "Upload Attachment"
+msgstr ""
+
 #: apps/remix/app/components/forms/avatar-image.tsx
 msgid "Upload Avatar"
 msgstr "アバターをアップロード"
@@ -11861,6 +11933,10 @@ msgstr "文書をアップロードして受信者を追加"
 #: apps/remix/app/components/general/envelope/envelope-upload-button.tsx
 msgid "Upload failed"
 msgstr "アップロードに失敗しました"
+
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
+msgid "Upload PDF"
+msgstr ""
 
 #: apps/remix/app/components/general/admin-global-settings-section.tsx
 msgid "Upload signature"
@@ -11904,6 +11980,11 @@ msgstr "アップロードされたファイルは許可されていない形式
 #: apps/remix/app/components/general/envelope/envelope-drop-zone-wrapper.tsx
 msgid "Uploading"
 msgstr "アップロード中"
+
+#: apps/remix/app/components/dialogs/sign-field-attachment-dialog.tsx
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
+msgid "Uploading..."
+msgstr ""
 
 #: apps/remix/app/components/general/document/document-attachments-popover.tsx
 #: apps/remix/app/components/general/document/embedded-editor-attachment-popover.tsx
@@ -13921,4 +14002,3 @@ msgstr "認証コード:"
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl.settings.sso.tsx
 msgid "your-domain.com another-domain.com"
 msgstr "your-domain.com another-domain.com"
-

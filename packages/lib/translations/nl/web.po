@@ -1664,6 +1664,10 @@ msgstr "Er is een fout opgetreden bij het toevoegen van ondertekenaars."
 msgid "An error occurred while adding the fields."
 msgstr "Er is een fout opgetreden bij het toevoegen van de velden."
 
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
+msgid "An error occurred while attaching the file."
+msgstr ""
+
 #: apps/remix/app/components/general/document/document-edit-form.tsx
 msgid "An error occurred while auto-saving the document settings."
 msgstr "Er is een fout opgetreden tijdens het automatisch opslaan van de documentinstellingen."
@@ -1748,6 +1752,10 @@ msgstr "Er is een fout opgetreden bij het verplaatsen van de sjabloon."
 msgid "An error occurred while rejecting the document. Please try again."
 msgstr "Er is een fout opgetreden bij het afwijzen van het document. Probeer het opnieuw."
 
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
+msgid "An error occurred while removing the attachment."
+msgstr ""
+
 #: apps/remix/app/components/general/document-signing/document-signing-checkbox-field.tsx
 #: apps/remix/app/components/general/document-signing/document-signing-date-field.tsx
 #: apps/remix/app/components/general/document-signing/document-signing-dropdown-field.tsx
@@ -1779,6 +1787,7 @@ msgstr "Er is een fout opgetreden bij het verzenden van het document."
 msgid "An error occurred while sending your confirmation email"
 msgstr "Er is een fout opgetreden bij het verzenden van je bevestigingsmail"
 
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
 #: apps/remix/app/components/general/document-signing/document-signing-checkbox-field.tsx
 #: apps/remix/app/components/general/document-signing/document-signing-date-field.tsx
 #: apps/remix/app/components/general/document-signing/document-signing-dropdown-field.tsx
@@ -2107,15 +2116,45 @@ msgstr "Aan het assisteren"
 msgid "At least one signature type must be enabled"
 msgstr "Er moet ten minste één handtekeningtype zijn ingeschakeld."
 
+#: apps/remix/app/components/dialogs/sign-field-attachment-dialog.tsx
+msgid "Attach"
+msgstr ""
+
+#: apps/remix/app/components/general/envelope-editor/envelope-editor-fields-drag-drop.tsx
+msgid "Attachment"
+msgstr ""
+
+#. placeholder {0}: index + 1
+#: apps/remix/app/components/general/document-signing/document-signing-page-view-v2.tsx
+msgid "Attachment {0}"
+msgstr ""
+
 #: apps/remix/app/components/general/document/document-attachments-popover.tsx
 #: apps/remix/app/components/general/document/embedded-editor-attachment-popover.tsx
 msgid "Attachment added successfully."
 msgstr "Bijlage succesvol toegevoegd."
 
+#: apps/remix/app/components/general/document-signing/document-signing-page-view-v2.tsx
+msgid "Attachment included - PDF file"
+msgstr ""
+
 #: apps/remix/app/components/general/document/document-attachments-popover.tsx
 #: apps/remix/app/components/general/document/embedded-editor-attachment-popover.tsx
 msgid "Attachment removed successfully."
 msgstr "Bijlage succesvol verwijderd."
+
+#: apps/remix/app/components/general/envelope-editor/envelope-editor-fields-page.tsx
+msgid "Attachment Settings"
+msgstr ""
+
+#: packages/lib/utils/fields.ts
+#: packages/ui/primitives/document-flow/types.ts
+msgid "Attachment Upload"
+msgstr ""
+
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
+msgid "Attachment uploaded"
+msgstr ""
 
 #: apps/remix/app/components/general/document-signing/document-signing-attachments-popover.tsx
 #: apps/remix/app/components/general/document-signing/document-signing-attachments-popover.tsx
@@ -2440,6 +2479,7 @@ msgstr "Kunt u niemand vinden?"
 #: apps/remix/app/components/dialogs/passkey-create-dialog.tsx
 #: apps/remix/app/components/dialogs/public-profile-template-manage-dialog.tsx
 #: apps/remix/app/components/dialogs/session-logout-all-dialog.tsx
+#: apps/remix/app/components/dialogs/sign-field-attachment-dialog.tsx
 #: apps/remix/app/components/dialogs/sign-field-checkbox-dialog.tsx
 #: apps/remix/app/components/dialogs/sign-field-email-dialog.tsx
 #: apps/remix/app/components/dialogs/sign-field-initials-dialog.tsx
@@ -2675,6 +2715,10 @@ msgstr "Klik om de ondertekeningslink te kopiëren om naar de ontvanger te sture
 #: apps/remix/app/components/general/envelope-signing/envelope-signer-page-renderer.tsx
 msgid "Click to insert field"
 msgstr "Klik om veld in te voegen"
+
+#: apps/remix/app/components/dialogs/sign-field-attachment-dialog.tsx
+msgid "Click to select a PDF file"
+msgstr ""
 
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl.settings.sso.tsx
 msgid "Client ID"
@@ -5099,6 +5143,8 @@ msgstr "Envelope bijgewerkt"
 #: apps/remix/app/components/dialogs/webhook-create-dialog.tsx
 #: apps/remix/app/components/embed/multisign/multi-sign-document-signing-view.tsx
 #: apps/remix/app/components/embed/multisign/multi-sign-document-signing-view.tsx
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
 #: apps/remix/app/components/general/document-signing/document-signing-auto-sign.tsx
 #: apps/remix/app/components/general/document-signing/document-signing-checkbox-field.tsx
 #: apps/remix/app/components/general/document-signing/document-signing-checkbox-field.tsx
@@ -5373,6 +5419,11 @@ msgstr "Bijwerken van webhook mislukt"
 msgid "Failed to upload CSV. Please check the file format and try again."
 msgstr "CSV uploaden is mislukt. Controleer de bestandsindeling en probeer het opnieuw."
 
+#: apps/remix/app/components/dialogs/sign-field-attachment-dialog.tsx
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
+msgid "Failed to upload the file. Please try again."
+msgstr ""
+
 #: packages/email/templates/bulk-send-complete.tsx
 msgid "Failed: {failedCount}"
 msgstr "Mislukt: {failedCount}"
@@ -5392,6 +5443,7 @@ msgid "Field character limit"
 msgstr "Tekenlimiet veld"
 
 #: apps/remix/app/components/forms/editor/editor-field-generic-field-forms.tsx
+#: packages/ui/primitives/document-flow/field-items-advanced-settings/attachment-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/date-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/email-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/initials-field.tsx
@@ -5508,6 +5560,7 @@ msgid "Folder updated successfully"
 msgstr "Map succesvol bijgewerkt"
 
 #: apps/remix/app/components/forms/editor/editor-field-generic-field-forms.tsx
+#: packages/ui/primitives/document-flow/field-items-advanced-settings/attachment-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/date-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/email-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/initials-field.tsx
@@ -7307,6 +7360,11 @@ msgstr "Er kan maar één bestand tegelijk worden geüpload"
 msgid "Only PDF files are allowed"
 msgstr "Alleen PDF-bestanden zijn toegestaan"
 
+#: apps/remix/app/components/dialogs/sign-field-attachment-dialog.tsx
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
+msgid "Only PDF files are supported. Please select a PDF file."
+msgstr ""
+
 #: apps/remix/app/components/general/generic-error-layout.tsx
 #: apps/remix/app/components/general/generic-error-layout.tsx
 #: apps/remix/app/routes/_authenticated+/t.$teamUrl+/documents.$id._layout.tsx
@@ -8188,6 +8246,7 @@ msgstr "Opnieuw registreren"
 msgid "Re-register Email Domain"
 msgstr "E-maildomein opnieuw registreren"
 
+#: packages/ui/primitives/document-flow/field-items-advanced-settings/attachment-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/checkbox-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/dropdown-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx
@@ -8537,6 +8596,10 @@ msgstr "Herinneringen"
 msgid "Remove"
 msgstr "Verwijderen"
 
+#: apps/remix/app/components/dialogs/sign-field-attachment-dialog.tsx
+msgid "Remove attachment"
+msgstr ""
+
 #: apps/remix/app/components/tables/organisation-email-domains-table.tsx
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl.settings.email-domains.$id.tsx
 msgid "Remove email domain"
@@ -8640,6 +8703,7 @@ msgstr "Passkey vereisen"
 msgid "Require password"
 msgstr "Wachtwoord vereisen"
 
+#: packages/ui/primitives/document-flow/field-items-advanced-settings/attachment-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/checkbox-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/dropdown-field.tsx
 #: packages/ui/primitives/document-flow/field-items-advanced-settings/number-field.tsx
@@ -9002,6 +9066,10 @@ msgstr "Selecteer een bestemming voor deze map."
 #: apps/remix/app/components/dialogs/document-move-to-folder-dialog.tsx
 msgid "Select a folder to move this document to."
 msgstr "Selecteer een map om dit document naar te verplaatsen."
+
+#: apps/remix/app/components/dialogs/sign-field-attachment-dialog.tsx
+msgid "Select a PDF file to attach to this document."
+msgstr ""
 
 #: apps/remix/app/components/dialogs/organisation-create-dialog.tsx
 msgid "Select a plan"
@@ -11829,6 +11897,10 @@ msgstr "Upload een aangepast document om te gebruiken in plaats van het standaar
 msgid "Upload and Process"
 msgstr "Uploaden en verwerken"
 
+#: apps/remix/app/components/dialogs/sign-field-attachment-dialog.tsx
+msgid "Upload Attachment"
+msgstr ""
+
 #: apps/remix/app/components/forms/avatar-image.tsx
 msgid "Upload Avatar"
 msgstr "Avatar uploaden"
@@ -11861,6 +11933,10 @@ msgstr "Upload documenten en voeg ontvangers toe"
 #: apps/remix/app/components/general/envelope/envelope-upload-button.tsx
 msgid "Upload failed"
 msgstr "Uploaden mislukt"
+
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
+msgid "Upload PDF"
+msgstr ""
 
 #: apps/remix/app/components/general/admin-global-settings-section.tsx
 msgid "Upload signature"
@@ -11904,6 +11980,11 @@ msgstr "Geüpload bestand is van een niet‑toegestaan bestandstype"
 #: apps/remix/app/components/general/envelope/envelope-drop-zone-wrapper.tsx
 msgid "Uploading"
 msgstr "Uploaden"
+
+#: apps/remix/app/components/dialogs/sign-field-attachment-dialog.tsx
+#: apps/remix/app/components/general/document-signing/document-signing-attachment-field.tsx
+msgid "Uploading..."
+msgstr ""
 
 #: apps/remix/app/components/general/document/document-attachments-popover.tsx
 #: apps/remix/app/components/general/document/embedded-editor-attachment-popover.tsx
@@ -13921,4 +14002,3 @@ msgstr "Uw verificatiecode:"
 #: apps/remix/app/routes/_authenticated+/o.$orgUrl.settings.sso.tsx
 msgid "your-domain.com another-domain.com"
 msgstr "your-domain.com another-domain.com"
-
