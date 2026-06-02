@@ -141,7 +141,12 @@ export const DocumentSigningAuthProvider = ({
 
   const executeActionAuthProcedure = async (options: ExecuteActionAuthProcedureOptions) => {
     // Directly run callback if no auth required.
-    if (!derivedRecipientActionAuth || options.actionTarget !== FieldType.SIGNATURE) {
+    const actionAuthFieldTypes: FieldType[] = [FieldType.SIGNATURE, FieldType.ATTACHMENT];
+
+    if (
+      !derivedRecipientActionAuth ||
+      (options.actionTarget !== 'DOCUMENT' && !actionAuthFieldTypes.includes(options.actionTarget))
+    ) {
       await options.onReauthFormSubmit();
       return;
     }

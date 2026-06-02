@@ -8,7 +8,7 @@ import { match } from 'ts-pattern';
 /**
  * Ensure all required fonts are registered in the skia-canvas FontLibrary.
  *
- * Fonts are registered once per process and retained — calling this multiple
+ * Fonts are registered once per process and retained; calling this multiple
  * times is a no-op after the first invocation.
  */
 export const ensureFontLibrary = () => {
@@ -65,6 +65,7 @@ export const parseFieldTypeFromPlaceholder = (fieldTypeString: string): FieldTyp
     .with('RADIO', () => FieldType.RADIO)
     .with('CHECKBOX', () => FieldType.CHECKBOX)
     .with('DROPDOWN', () => FieldType.DROPDOWN)
+    .with('ATTACHMENT', () => FieldType.ATTACHMENT)
     .otherwise(() => {
       throw new AppError(AppErrorCode.INVALID_BODY, {
         message: `Invalid field type: ${fieldTypeString}`,

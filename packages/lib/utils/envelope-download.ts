@@ -90,3 +90,13 @@ export const getDocumentDataUrlForPdfViewer = (options: DocumentDataUrlOptions):
 
   return getDocumentDataUrl(options);
 };
+
+export type AttachmentPdfUrlOptions = {
+  envelopeId: string;
+  documentDataId: string;
+  token: string;
+};
+
+export const getAttachmentPdfUrl = ({ envelopeId, documentDataId, token }: AttachmentPdfUrlOptions) => {
+  return `${NEXT_PUBLIC_WEBAPP_URL()}/api/files/token/${token}/envelope/${envelopeId}/attachment/${documentDataId}/item.pdf`;
+};

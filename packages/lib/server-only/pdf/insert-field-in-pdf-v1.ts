@@ -1,6 +1,5 @@
 // https://github.com/Hopding/pdf-lib/issues/20#issuecomment-412852821
-import type { PDFDocument, PDFFont, PDFTextField } from '@cantoo/pdf-lib';
-import { degrees, RotationTypes, radiansToDegrees, rgb, setFontAndSize, TextAlignment } from '@cantoo/pdf-lib';
+import { PDFDocument, type PDFFont, type PDFTextField, degrees, RotationTypes, radiansToDegrees, rgb, setFontAndSize, TextAlignment } from '@cantoo/pdf-lib';
 import {
   DEFAULT_HANDWRITING_FONT_SIZE,
   DEFAULT_STANDARD_FONT_SIZE,
@@ -14,6 +13,8 @@ import fontkit from '@pdf-lib/fontkit';
 import { FieldType } from '@prisma/client';
 import { match, P } from 'ts-pattern';
 
+import { prisma } from '@documenso/prisma';
+import { getFileServerSide } from '../../universal/upload/get-file.server';
 import { NEXT_PRIVATE_INTERNAL_WEBAPP_URL } from '../../constants/app';
 import {
   ZCheckboxFieldMeta,
@@ -346,6 +347,98 @@ export const insertFieldInPDFV1 = async (pdf: PDFDocument, field: FieldWithSigna
         if (selected.includes(item.value)) {
           radio.select(item.value);
         }
+      }
+    })
+    .with({ type: FieldType.ATTACHMENT }, async (field) => {
+      // Explicit error boundary: attachment processing failures must never abort finalization.
+      // Relying on an outer catch is insufficient; it may not exist or may re-throw.
+      try {
+        if (!field.customText) {
+          // Field has no value; nothing to stamp.
+          return;
+        }
+
+        const attachmentValue = field.customText;
+        const fontSize = 10;
+        let stampX = fieldX + 4;
+        let stampY = fieldY + 4;
+
+        // Invert Y for PDF coordinate system (bottom-left origin).
+        stampY = pageHeight - stampY - fontSize;
+
+        if (pageRotationInDegrees !== 0) {
+          const adjustedPosition = adjustPositionForRotation(
+            pageWidth,
+            pageHeight,
+            stampX,
+            stampY,
+            pageRotationInDegrees,
+          );
+
+          stampX = adjustedPosition.xPos;
+          stampY = adjustedPosition.yPos;
+        }
+
+        if (attachmentValue.startsWith('docdata:')) {
+          // Real uploaded attachment: retrieve the stored PDF and merge its pages.
+          const documentDataId = attachmentValue.slice('docdata:'.length);
+
+          const documentData = await prisma.documentData.findUnique({
+            where: { id: documentDataId },
+          });
+
+          if (!documentData) {
+            // Data not found, stamp a placeholder so the signer's intent is visible.
+            page.drawText('Attachment not found', {
+              x: stampX,
+              y: stampY,
+              size: fontSize,
+              font,
+              maxWidth: fieldWidth - 8,
+              lineHeight: fontSize * 1.3,
+              rotate: degrees(pageRotationInDegrees),
+            });
+            return;
+          }
+
+          const attachmentBytes = await getFileServerSide(documentData);
+          const attachmentDoc = await PDFDocument.load(attachmentBytes);
+
+          // Copy all pages from the attachment into the main document (appended at end).
+          const pageIndices = Array.from({ length: attachmentDoc.getPageCount() }, (_, i) => i);
+          const copiedPages = await pdf.copyPages(attachmentDoc, pageIndices);
+
+          for (const copiedPage of copiedPages) {
+            pdf.addPage(copiedPage);
+          }
+
+          // Stamp a brief indicator at the field position pointing to the appended pages.
+          page.drawText('See attached document below', {
+            x: stampX,
+            y: stampY,
+            size: fontSize,
+            font,
+            maxWidth: fieldWidth - 8,
+            lineHeight: fontSize * 1.3,
+            rotate: degrees(pageRotationInDegrees),
+          });
+        } else {
+          // External URL or legacy mock value: stamp the URL as visible text for copyability.
+          const stampText = `Download Attachment\n${attachmentValue}`;
+
+          page.drawText(stampText, {
+            x: stampX,
+            y: stampY,
+            size: fontSize,
+            font,
+            maxWidth: fieldWidth - 8,
+            lineHeight: fontSize * 1.3,
+            rotate: degrees(pageRotationInDegrees),
+          });
+        }
+      } catch (err) {
+        // Catch all attachment processing errors and continue with finalization.
+        console.error('[ATTACHMENT] Failed to process attachment field, continuing finalization:', err);
       }
     })
     .otherwise((field) => {

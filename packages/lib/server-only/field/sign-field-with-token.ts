@@ -26,6 +26,7 @@ import type { RequestMetadata } from '../../universal/extract-request-metadata';
 import { createDocumentAuditLogData } from '../../utils/document-audit-logs';
 import { assertRecipientNotExpired } from '../../utils/recipients';
 import { validateFieldAuth } from '../document/validate-field-auth';
+import { validateAttachmentFieldValue } from './validate-attachment-field-value';
 
 export type SignFieldWithTokenOptions = {
   token: string;
@@ -171,6 +172,15 @@ export const signFieldWithToken = async ({
     }
   }
 
+  if (field.type === FieldType.ATTACHMENT) {
+    await validateAttachmentFieldValue({
+      value,
+      envelopeId: field.envelopeId,
+      fieldId: field.id,
+      recipientId: field.recipientId,
+    });
+  }
+
   const derivedRecipientActionAuth = await validateFieldAuth({
     documentAuthOptions: envelope.authOptions,
     recipient,
@@ -294,10 +304,17 @@ export const signFieldWithToken = async ({
               type,
               data: updatedField.customText,
             }))
-            .with(FieldType.NUMBER, FieldType.RADIO, FieldType.CHECKBOX, FieldType.DROPDOWN, (type) => ({
-              type,
-              data: updatedField.customText,
-            }))
+            .with(
+              FieldType.NUMBER,
+              FieldType.RADIO,
+              FieldType.CHECKBOX,
+              FieldType.DROPDOWN,
+              FieldType.ATTACHMENT,
+              (type) => ({
+                type,
+                data: updatedField.customText,
+              }),
+            )
             .exhaustive(),
           fieldSecurity: derivedRecipientActionAuth
             ? {

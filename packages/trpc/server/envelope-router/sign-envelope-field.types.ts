@@ -1,5 +1,6 @@
 import { ZRecipientActionAuthSchema } from '@documenso/lib/types/document-auth';
 import { ZFieldSchema } from '@documenso/lib/types/field';
+import { ZAttachmentFieldValueSchema } from '@documenso/lib/utils/attachment-field';
 import { FieldType } from '@documenso/prisma/client';
 import SignatureSchema from '@documenso/prisma/generated/zod/modelSchema/SignatureSchema';
 import { z } from 'zod';
@@ -44,6 +45,10 @@ export const ZSignEnvelopeFieldValue = z.discriminatedUnion('type', [
   z.object({
     type: z.literal(FieldType.SIGNATURE),
     value: z.string().nullable(),
+  }),
+  z.object({
+    type: z.literal(FieldType.ATTACHMENT),
+    value: ZAttachmentFieldValueSchema.nullable(),
   }),
 ]);
 

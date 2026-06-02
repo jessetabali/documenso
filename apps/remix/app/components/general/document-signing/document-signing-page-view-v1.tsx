@@ -5,6 +5,7 @@ import { DEFAULT_DOCUMENT_TIME_ZONE } from '@documenso/lib/constants/time-zones'
 import type { DocumentAndSender } from '@documenso/lib/server-only/document/get-document-by-token';
 import type { TRecipientAccessAuth } from '@documenso/lib/types/document-auth';
 import {
+  ZAttachmentFieldMeta,
   ZCheckboxFieldMeta,
   ZDropdownFieldMeta,
   ZNumberFieldMeta,
@@ -34,6 +35,7 @@ import { DocumentSigningAttachmentsPopover } from '~/components/general/document
 import { DocumentSigningAutoSign } from '~/components/general/document-signing/document-signing-auto-sign';
 import { DocumentSigningCheckboxField } from '~/components/general/document-signing/document-signing-checkbox-field';
 import { DocumentSigningDateField } from '~/components/general/document-signing/document-signing-date-field';
+import { DocumentSigningAttachmentField } from '~/components/general/document-signing/document-signing-attachment-field';
 import { DocumentSigningDropdownField } from '~/components/general/document-signing/document-signing-dropdown-field';
 import { DocumentSigningEmailField } from '~/components/general/document-signing/document-signing-email-field';
 import { DocumentSigningForm } from '~/components/general/document-signing/document-signing-form';
@@ -448,6 +450,13 @@ export const DocumentSigningPageViewV1 = ({
                     fieldMeta: field.fieldMeta ? ZDropdownFieldMeta.parse(field.fieldMeta) : null,
                   };
                   return <DocumentSigningDropdownField key={field.id} field={fieldWithMeta} />;
+                })
+                .with(FieldType.ATTACHMENT, () => {
+                  const fieldWithMeta: FieldWithSignatureAndFieldMeta = {
+                    ...field,
+                    fieldMeta: field.fieldMeta ? ZAttachmentFieldMeta.parse(field.fieldMeta) : null,
+                  };
+                  return <DocumentSigningAttachmentField key={field.id} field={fieldWithMeta} />;
                 })
                 .otherwise(() => null),
             )}

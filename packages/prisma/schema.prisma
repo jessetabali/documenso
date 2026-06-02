@@ -436,6 +436,7 @@ model Envelope {
   documentMeta   DocumentMeta @relation(fields: [documentMetaId], references: [id])
 
   envelopeAttachments EnvelopeAttachment[]
+  attachmentFieldUploads AttachmentFieldUpload[]
 
   @@index([type])
   @@index([status])
@@ -495,11 +496,35 @@ enum DocumentSigningOrder {
 }
 
 model DocumentData {
-  id           String           @id @default(cuid())
-  type         DocumentDataType
-  data         String
-  initialData  String
-  envelopeItem EnvelopeItem?
+  id                    String                 @id @default(cuid())
+  type                  DocumentDataType
+  data                  String
+  initialData           String
+  envelopeItem          EnvelopeItem?
+  attachmentFieldUpload AttachmentFieldUpload?
+}
+
+model AttachmentFieldUpload {
+  id String @id @default(cuid())
+
+  documentDataId String       @unique
+  documentData   DocumentData @relation(fields: [documentDataId], references: [id], onDelete: Cascade)
+
+  envelopeId String
+  envelope   Envelope @relation(fields: [envelopeId], references: [id], onDelete: Cascade)
+
+  fieldId Int
+  field   Field @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+
+  recipientId Int
+  recipient   Recipient @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([envelopeId])
+  @@index([fieldId])
+  @@index([recipientId])
+  @@index([documentDataId, envelopeId, fieldId, recipientId])
 }
 
 enum DocumentDistributionMethod {
@@ -603,6 +628,7 @@ model Recipient {
   envelope             Envelope      @relation(fields: [envelopeId], references: [id], onDelete: Cascade)
   fields               Field[]
   signatures           Signature[]
+  attachmentFieldUploads AttachmentFieldUpload[]
 
   @@index([token])
   @@index([email])
@@ -629,6 +655,7 @@ enum FieldType {
   RADIO
   CHECKBOX
   DROPDOWN
+  ATTACHMENT
 }
 
 /// @zod.import(["import { ZFieldMetaNotOptionalSchema } from '@documenso/lib/types/field-meta';"])
@@ -651,6 +678,7 @@ model Field {
   recipient      Recipient    @relation(fields: [recipientId], references: [id], onDelete: Cascade)
   signature      Signature?
   fieldMeta      Json? /// [FieldMeta] @zod.custom.use(ZFieldMetaNotOptionalSchema)
+  attachmentFieldUploads AttachmentFieldUpload[]
 
   @@index([envelopeId])
   @@index([envelopeItemId])

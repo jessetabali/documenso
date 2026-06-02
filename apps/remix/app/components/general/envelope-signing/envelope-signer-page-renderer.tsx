@@ -26,6 +26,7 @@ import { useEffect, useMemo } from 'react';
 import { match } from 'ts-pattern';
 
 import { useEmbedSigningContext } from '~/components/embed/embed-signing-context';
+import { handleAttachmentFieldClick } from '~/utils/field-signing/attachment-field';
 import { handleCheckboxFieldClick } from '~/utils/field-signing/checkbox-field';
 import { handleDropdownFieldClick } from '~/utils/field-signing/dropdown-field';
 import { handleEmailFieldClick } from '~/utils/field-signing/email-field';
@@ -334,6 +335,8 @@ export const EnvelopeSignerPageRenderer = ({ pageData }: { pageData: PageRenderD
                 fieldGroup.add(loadingSpinnerGroup);
                 await signField(field.id, payload);
               }
+
+              loadingSpinnerGroup.destroy();
             })
             .finally(() => {
               loadingSpinnerGroup.destroy();
@@ -351,6 +354,37 @@ export const EnvelopeSignerPageRenderer = ({ pageData }: { pageData: PageRenderD
           }).finally(() => {
             loadingSpinnerGroup.destroy();
           });
+        })
+        /**
+         * ATTACHMENT FIELD.
+         */
+        .with({ type: FieldType.ATTACHMENT }, (field) => {
+          void handleAttachmentFieldClick({
+            field,
+            token: recipient.token,
+            envelopeId: envelope.id,
+          })
+            .then(async (payload) => {
+              if (payload) {
+                fieldGroup.add(loadingSpinnerGroup);
+
+                if (payload.value) {
+                  void executeActionAuthProcedure({
+                    onReauthFormSubmit: async (authOptions) => {
+                      await signField(field.id, payload, authOptions);
+
+                      loadingSpinnerGroup.destroy();
+                    },
+                    actionTarget: field.type,
+                  });
+                } else {
+                  await signField(field.id, payload);
+                }
+              }
+            })
+            .finally(() => {
+              loadingSpinnerGroup.destroy();
+            });
         })
         /**
          * SIGNATURE FIELD.

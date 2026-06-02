@@ -88,5 +88,31 @@ export const renderField = ({
     .with(FieldType.FREE_SIGNATURE, () => {
       throw new Error('Free signature fields are not supported');
     })
+    .with(FieldType.ATTACHMENT, () => {
+      let displayText: string;
+
+      if (!field.inserted) {
+        // Not yet filled: show label (renderGenericTextFieldElement will use translations).
+        displayText = field.customText;
+      } else if (mode === 'export') {
+        // PDF finalization: stamp a visible indicator.
+        // For docdata: references, the actual PDF is merged separately by the seal handler;
+        // for external URLs, we append the URL as a second line for copyability.
+        const url = field.customText;
+        const isDocData = url.startsWith('docdata:');
+        displayText = isDocData || !url ? 'Attachment included' : `Download Attachment\n${url}`;
+      } else {
+        // Interactive signing / editing: show uploaded confirmation.
+        displayText = 'Attachment uploaded';
+      }
+
+      return renderGenericTextFieldElement(
+        {
+          ...field,
+          customText: displayText,
+        },
+        options,
+      );
+    })
     .exhaustive();
 };

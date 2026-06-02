@@ -3,6 +3,7 @@ import path from 'node:path';
 import { createEnvelope } from '@documenso/lib/server-only/envelope/create-envelope';
 import { incrementDocumentId } from '@documenso/lib/server-only/envelope/increment-id';
 import {
+  FIELD_ATTACHMENT_META_DEFAULT_VALUES,
   FIELD_CHECKBOX_META_DEFAULT_VALUES,
   FIELD_DATE_META_DEFAULT_VALUES,
   FIELD_DROPDOWN_META_DEFAULT_VALUES,
@@ -593,6 +594,7 @@ export const seedPendingDocumentWithFullFields = async ({
                 .with(FieldType.DROPDOWN, () => FIELD_DROPDOWN_META_DEFAULT_VALUES)
                 .with(FieldType.INITIALS, () => FIELD_INITIALS_META_DEFAULT_VALUES)
                 .with(FieldType.FREE_SIGNATURE, () => undefined)
+                .with(FieldType.ATTACHMENT, () => FIELD_ATTACHMENT_META_DEFAULT_VALUES)
                 .exhaustive(),
             })),
           },

@@ -4,6 +4,7 @@ import { z } from 'zod';
 
 import {
   FIELD_SIGNATURE_META_DEFAULT_VALUES,
+  ZAttachmentFieldMeta,
   ZCheckboxFieldMeta,
   ZDateFieldMeta,
   ZDropdownFieldMeta,
@@ -176,6 +177,13 @@ export const ZFieldDropdownSchema = BaseFieldSchemaUsingNumbers.extend({
 
 export type TFieldDropdown = z.infer<typeof ZFieldDropdownSchema>;
 
+export const ZFieldAttachmentSchema = BaseFieldSchemaUsingNumbers.extend({
+  type: z.literal(FieldType.ATTACHMENT),
+  fieldMeta: ZAttachmentFieldMeta,
+});
+
+export type TFieldAttachment = z.infer<typeof ZFieldAttachmentSchema>;
+
 /**
  * The full field schema which will enforce all types and meta fields.
  */
@@ -190,6 +198,7 @@ export const ZFullFieldSchema = z.discriminatedUnion('type', [
   ZFieldRadioSchema,
   ZFieldCheckboxSchema,
   ZFieldDropdownSchema,
+  ZFieldAttachmentSchema,
 ]);
 
 export type TFullFieldSchema = z.infer<typeof ZFullFieldSchema>;

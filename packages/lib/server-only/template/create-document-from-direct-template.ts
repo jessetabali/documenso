@@ -42,6 +42,7 @@ import { mapSecondaryIdToTemplateId } from '../../utils/envelope';
 import { sendDocument } from '../document/send-document';
 import { validateFieldAuth } from '../document/validate-field-auth';
 import { incrementDocumentId } from '../envelope/increment-id';
+import { validateAttachmentFieldValue } from '../field/validate-attachment-field-value';
 import { getTeamSettings } from '../team/get-team-settings';
 import { triggerWebhook } from '../webhooks/trigger/trigger-webhook';
 
@@ -245,6 +246,15 @@ export const createDocumentFromDirectTemplate = async ({
 
       if (templateField.type === FieldType.DATE) {
         customText = DateTime.now().setZone(derivedDocumentMeta.timezone).toFormat(derivedDocumentMeta.dateFormat);
+      }
+
+      if (templateField.type === FieldType.ATTACHMENT) {
+        await validateAttachmentFieldValue({
+          value: customText ?? '',
+          envelopeId: templateField.envelopeId,
+          fieldId: templateField.id,
+          recipientId: templateField.recipientId,
+        });
       }
 
       if (isSignatureField && !signatureImageAsBase64 && !typedSignature) {
@@ -577,6 +587,7 @@ export const createDocumentFromDirectTemplate = async ({
                 FieldType.CHECKBOX,
                 FieldType.DROPDOWN,
                 FieldType.RADIO,
+                FieldType.ATTACHMENT,
                 (type) => ({
                   type,
                   data: field.customText,

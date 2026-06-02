@@ -16,6 +16,7 @@ import { NEXT_PRIVATE_USE_PLAYWRIGHT_PDF } from '../../../constants/app';
 import { AppError, AppErrorCode } from '../../../errors/app-error';
 import { getAuditLogsPdf } from '../../../server-only/htmltopdf/get-audit-logs-pdf';
 import { getCertificatePdf } from '../../../server-only/htmltopdf/get-certificate-pdf';
+import { appendAttachmentFieldsToPdf } from '../../../server-only/pdf/append-attachment-fields-to-pdf';
 import { insertFieldInPDFV1 } from '../../../server-only/pdf/insert-field-in-pdf-v1';
 import { insertFieldInPDFV2 } from '../../../server-only/pdf/insert-field-in-pdf-v2';
 import { legacy_insertFieldInPDF } from '../../../server-only/pdf/legacy-insert-field-in-pdf';
@@ -451,6 +452,11 @@ const decorateAndSignPdf = async ({
         },
       });
     }
+
+    await appendAttachmentFieldsToPdf({
+      pdfDoc,
+      fields: envelopeItemFields,
+    });
   }
 
   // Re-flatten the form to handle our checkbox and radio fields that

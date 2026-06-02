@@ -2,6 +2,7 @@ import { DEFAULT_DOCUMENT_DATE_FORMAT } from '@documenso/lib/constants/date-form
 import { PDF_VIEWER_PAGE_SELECTOR } from '@documenso/lib/constants/pdf-viewer';
 import { DEFAULT_DOCUMENT_TIME_ZONE } from '@documenso/lib/constants/time-zones';
 import {
+  ZAttachmentFieldMeta,
   ZCheckboxFieldMeta,
   ZDropdownFieldMeta,
   ZNumberFieldMeta,
@@ -39,6 +40,7 @@ import { match } from 'ts-pattern';
 import { DocumentSigningCheckboxField } from '~/components/general/document-signing/document-signing-checkbox-field';
 import { DocumentSigningCompleteDialog } from '~/components/general/document-signing/document-signing-complete-dialog';
 import { DocumentSigningDateField } from '~/components/general/document-signing/document-signing-date-field';
+import { DocumentSigningAttachmentField } from '~/components/general/document-signing/document-signing-attachment-field';
 import { DocumentSigningDropdownField } from '~/components/general/document-signing/document-signing-dropdown-field';
 import { DocumentSigningEmailField } from '~/components/general/document-signing/document-signing-email-field';
 import { DocumentSigningInitialsField } from '~/components/general/document-signing/document-signing-initials-field';
@@ -370,6 +372,21 @@ export const DirectTemplateSigningForm = ({
 
                 return (
                   <DocumentSigningCheckboxField
+                    key={field.id}
+                    field={{
+                      ...field,
+                      fieldMeta: parsedFieldMeta,
+                    }}
+                    onSignField={onSignField}
+                    onUnsignField={onUnsignField}
+                  />
+                );
+              })
+              .with(FieldType.ATTACHMENT, () => {
+                const parsedFieldMeta = field.fieldMeta ? ZAttachmentFieldMeta.parse(field.fieldMeta) : null;
+
+                return (
+                  <DocumentSigningAttachmentField
                     key={field.id}
                     field={{
                       ...field,

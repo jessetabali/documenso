@@ -194,6 +194,11 @@ export const EnvelopeEditorPreviewPage = () => {
               customText: '',
             };
           })
+          .with({ type: FieldType.ATTACHMENT }, () => {
+            return {
+              customText: '',
+            };
+          })
           .exhaustive(),
       };
     });

@@ -21,8 +21,10 @@ import {
   ZGetPresignedPostUrlRequestSchema,
   ZUploadPdfRequestSchema,
 } from './files.types';
+import getAttachmentPdfByTokenRoute from './routes/get-attachment-pdf-by-token';
 import getEnvelopeItemPdfRoute from './routes/get-envelope-item-pdf';
 import getEnvelopeItemPdfByTokenRoute from './routes/get-envelope-item-pdf-by-token';
+import uploadAttachmentFieldPdfByTokenRoute from './routes/upload-attachment-field-pdf-by-token';
 
 export const filesRoute = new Hono<HonoEnv>()
   /**
@@ -352,3 +354,5 @@ export const filesRoute = new Hono<HonoEnv>()
 // Is different to the other file endpoints since it uses documentDataId for hard caching.
 filesRoute.route('/', getEnvelopeItemPdfRoute);
 filesRoute.route('/', getEnvelopeItemPdfByTokenRoute);
+filesRoute.route('/', getAttachmentPdfByTokenRoute);
+filesRoute.route('/', uploadAttachmentFieldPdfByTokenRoute);

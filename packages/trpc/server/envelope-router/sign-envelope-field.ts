@@ -1,6 +1,7 @@
 import { isBase64Image } from '@documenso/lib/constants/signatures';
 import { AppError, AppErrorCode } from '@documenso/lib/errors/app-error';
 import { validateFieldAuth } from '@documenso/lib/server-only/document/validate-field-auth';
+import { validateAttachmentFieldValue } from '@documenso/lib/server-only/field/validate-attachment-field-value';
 import { DOCUMENT_AUDIT_LOG_TYPE } from '@documenso/lib/types/document-audit-logs';
 import { createDocumentAuditLogData } from '@documenso/lib/utils/document-audit-logs';
 import { extractFieldInsertionValues } from '@documenso/lib/utils/envelope-signing';
@@ -126,6 +127,15 @@ export const signEnvelopeFieldRoute = procedure
     }
 
     const insertionValues = extractFieldInsertionValues({ fieldValue, field, documentMeta });
+
+    if (field.type === FieldType.ATTACHMENT && insertionValues.inserted) {
+      await validateAttachmentFieldValue({
+        value: insertionValues.customText,
+        envelopeId: field.envelopeId,
+        fieldId: field.id,
+        recipientId: field.recipientId,
+      });
+    }
 
     // Early return for uninserting fields.
     if (!insertionValues.inserted) {
@@ -262,10 +272,17 @@ export const signEnvelopeFieldRoute = procedure
                 type,
                 data: updatedField.customText,
               }))
-              .with(FieldType.NUMBER, FieldType.RADIO, FieldType.CHECKBOX, FieldType.DROPDOWN, (type) => ({
-                type,
-                data: updatedField.customText,
-              }))
+              .with(
+                FieldType.NUMBER,
+                FieldType.RADIO,
+                FieldType.CHECKBOX,
+                FieldType.DROPDOWN,
+                FieldType.ATTACHMENT,
+                (type) => ({
+                  type,
+                  data: updatedField.customText,
+                }),
+              )
               .exhaustive(),
             fieldSecurity: derivedRecipientActionAuth
               ? {

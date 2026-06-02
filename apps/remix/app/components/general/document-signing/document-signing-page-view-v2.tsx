@@ -1,11 +1,12 @@
 import { useCurrentEnvelopeRender } from '@documenso/lib/client-only/providers/envelope-render-provider';
 import { PDF_VIEWER_ERROR_MESSAGES } from '@documenso/lib/constants/pdf-viewer-i18n';
 import { mapSecondaryIdToDocumentId } from '@documenso/lib/utils/envelope';
+import { getAttachmentPdfUrl } from '@documenso/lib/utils/envelope-download';
 import { cn } from '@documenso/ui/lib/utils';
 import { Button } from '@documenso/ui/primitives/button';
 import { Separator } from '@documenso/ui/primitives/separator';
 import { Plural, Trans, useLingui } from '@lingui/react/macro';
-import { EnvelopeType, RecipientRole } from '@prisma/client';
+import { EnvelopeType, FieldType, RecipientRole } from '@prisma/client';
 import { motion } from 'framer-motion';
 import {
   ArrowLeftIcon,
@@ -20,6 +21,7 @@ import { Link } from 'react-router';
 import { match } from 'ts-pattern';
 
 import { EnvelopeDownloadDialog } from '~/components/dialogs/envelope-download-dialog';
+import { SignFieldAttachmentDialog } from '~/components/dialogs/sign-field-attachment-dialog';
 import { SignFieldCheckboxDialog } from '~/components/dialogs/sign-field-checkbox-dialog';
 import { SignFieldDropdownDialog } from '~/components/dialogs/sign-field-dropdown-dialog';
 import { SignFieldEmailDialog } from '~/components/dialogs/sign-field-email-dialog';
@@ -31,6 +33,7 @@ import { SignFieldTextDialog } from '~/components/dialogs/sign-field-text-dialog
 import { useEmbedSigningContext } from '~/components/embed/embed-signing-context';
 import { EnvelopeSignerPageRenderer } from '~/components/general/envelope-signing/envelope-signer-page-renderer';
 import { EnvelopePdfViewer } from '~/components/general/pdf-viewer/envelope-pdf-viewer';
+import PDFViewerLazy from '~/components/general/pdf-viewer/pdf-viewer-lazy';
 
 import { BrandingLogo } from '../branding-logo';
 import { DocumentSigningAttachmentsPopover } from '../document-signing/document-signing-attachments-popover';
@@ -79,6 +82,45 @@ export const DocumentSigningPageViewV2 = () => {
     return recipientFields.filter((field) => !field.inserted);
   }, [recipientFieldsRemaining, selectedAssistantRecipientFields, currentEnvelopeItem]);
 
+  /**
+   * Whether any ATTACHMENT field for this recipient currently has a non-empty URL value.
+   * Used to render the single attachment-included preview banner.
+   */
+  const hasAttachmentWithValue = useMemo(() => {
+    const fieldsToCheck =
+      recipient.role === RecipientRole.ASSISTANT ? selectedAssistantRecipientFields : recipientFields;
+
+    return fieldsToCheck.some(
+      (field) => field.type === FieldType.ATTACHMENT && field.inserted && Boolean(field.customText),
+    );
+  }, [recipient.role, recipientFields, selectedAssistantRecipientFields]);
+
+  const attachmentPreviewItems = useMemo(() => {
+    if (isDirectTemplate) {
+      return [];
+    }
+
+    const attachmentFields = envelope.recipients.flatMap((recipient) =>
+      recipient.fields.filter(
+        (field) => field.type === FieldType.ATTACHMENT && field.inserted && field.customText.startsWith('docdata:'),
+      ),
+    );
+
+    const uniqueDocumentDataIds = Array.from(
+      new Set(attachmentFields.map((field) => field.customText.slice('docdata:'.length))),
+    );
+
+    return uniqueDocumentDataIds.map((documentDataId, index) => ({
+      id: documentDataId,
+      title: t`Attachment ${index + 1}`,
+      data: getAttachmentPdfUrl({
+        envelopeId: envelope.id,
+        documentDataId,
+        token: recipient.token,
+      }),
+    }));
+  }, [envelope.id, envelope.recipients, isDirectTemplate, recipient.token, t]);
+
   return (
     <div className="min-h-screen w-screen bg-gray-50 dark:bg-background">
       <SignFieldEmailDialog.Root />
@@ -89,6 +131,7 @@ export const DocumentSigningPageViewV2 = () => {
       <SignFieldDropdownDialog.Root />
       <SignFieldSignatureDialog.Root />
       <SignFieldCheckboxDialog.Root />
+      <SignFieldAttachmentDialog.Root />
 
       <EnvelopeSignerHeader />
 
@@ -273,6 +316,35 @@ export const DocumentSigningPageViewV2 = () => {
                   <p className="text-foreground text-sm">
                     <Trans>No document selected</Trans>
                   </p>
+                </div>
+              )}
+
+              {attachmentPreviewItems.length > 0 && (
+                <div className="mt-6 flex w-full max-w-[800px] flex-col gap-6">
+                  {attachmentPreviewItems.map((attachment) => (
+                    <section key={attachment.id} className="w-full">
+                      <div className="mb-2 flex items-center gap-2 text-muted-foreground text-sm">
+                        <PaperclipIcon className="h-4 w-4 shrink-0 text-primary" />
+                        <span>{attachment.title}</span>
+                      </div>
+
+                      <PDFViewerLazy
+                        data={attachment.data}
+                        scrollParentRef={scrollableContainerRef}
+                        className="h-full w-full max-w-[800px]"
+                      />
+                    </section>
+                  ))}
+                </div>
+              )}
+
+              {/* Attachment preview banner fallback for attachments that cannot be rendered inline. */}
+              {hasAttachmentWithValue && attachmentPreviewItems.length === 0 && (
+                <div className="mt-4 flex w-full max-w-2xl items-center gap-2 rounded-md border border-border bg-muted/50 px-4 py-3 text-muted-foreground text-sm">
+                  <PaperclipIcon className="h-4 w-4 shrink-0 text-primary" />
+                  <span>
+                    <Trans>Attachment included - PDF file</Trans>
+                  </span>
                 </div>
               )}
 

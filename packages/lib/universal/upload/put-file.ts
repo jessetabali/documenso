@@ -38,6 +38,45 @@ export const putPdfFile = async (file: File) => {
   return result;
 };
 
+export type PutAttachmentFieldPdfFileOptions = {
+  token: string;
+  envelopeId: string;
+  fieldId: number;
+  file: File;
+};
+
+export const putAttachmentFieldPdfFile = async ({
+  token,
+  envelopeId,
+  fieldId,
+  file,
+}: PutAttachmentFieldPdfFileOptions) => {
+  const formData = new FormData();
+
+  const buffer = await file.arrayBuffer();
+  const blob = new Blob([buffer], { type: file.type });
+  const properFile = new File([blob], file.name, { type: file.type });
+
+  formData.append('file', properFile);
+
+  const response = await fetch(
+    `/api/files/token/${token}/envelope/${envelopeId}/field/${fieldId}/attachment/upload-pdf`,
+    {
+      method: 'POST',
+      body: formData,
+    },
+  );
+
+  if (!response.ok) {
+    console.error('Upload failed:', response.statusText);
+    throw new AppError('UPLOAD_FAILED');
+  }
+
+  const result: TUploadPdfResponse = await response.json();
+
+  return result;
+};
+
 /**
  * Uploads a file to the appropriate storage location.
  */

@@ -2,6 +2,7 @@ import type { FieldWithSignature } from '@documenso/prisma/types/field-with-sign
 import { PDF } from '@libpdf/core';
 import { groupBy } from 'remeda';
 
+import { appendAttachmentFieldsToPdf } from './append-attachment-fields-to-pdf';
 import { insertFieldInPDFV2 } from './insert-field-in-pdf-v2';
 
 type GeneratePartialSignedPdfOptions = {
@@ -69,6 +70,11 @@ export const generatePartialSignedPdf = async ({ pdfData, fields }: GeneratePart
       },
     });
   }
+
+  await appendAttachmentFieldsToPdf({
+    pdfDoc,
+    fields,
+  });
 
   pdfDoc.flattenAll();
 

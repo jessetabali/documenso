@@ -1,5 +1,6 @@
 import { useAutoSave } from '@documenso/lib/client-only/hooks/use-autosave';
 import {
+  type TAttachmentFieldMeta as AttachmentFieldMeta,
   type TBaseFieldMeta as BaseFieldMeta,
   type TCheckboxFieldMeta as CheckboxFieldMeta,
   type TDateFieldMeta as DateFieldMeta,
@@ -31,6 +32,7 @@ import {
   DocumentFlowFormContainerHeader,
 } from './document-flow-root';
 import { FieldItem } from './field-item';
+import { AttachmentFieldAdvancedSettings } from './field-items-advanced-settings/attachment-field';
 import { CheckboxFieldAdvancedSettings } from './field-items-advanced-settings/checkbox-field';
 import { DateFieldAdvancedSettings } from './field-items-advanced-settings/date-field';
 import { DropdownFieldAdvancedSettings } from './field-items-advanced-settings/dropdown-field';
@@ -59,6 +61,7 @@ export type FieldMetaKeys =
   | keyof RadioFieldMeta
   | keyof CheckboxFieldMeta
   | keyof DropdownFieldMeta
+  | keyof AttachmentFieldMeta
   | keyof InitialsFieldMeta
   | keyof NameFieldMeta
   | keyof EmailFieldMeta
@@ -144,6 +147,13 @@ const getDefaultState = (fieldType: FieldType): FieldMeta => {
         required: false,
         readOnly: false,
       };
+    case FieldType.ATTACHMENT:
+      return {
+        type: 'attachment',
+        fontSize: 14,
+        required: false,
+        readOnly: false,
+      };
     default:
       throw new Error(`Unsupported field type: ${fieldType}`);
   }
@@ -206,7 +216,7 @@ export const FieldAdvancedSettings = forwardRef<HTMLDivElement, FieldAdvancedSet
 
           return {
             ...prevState,
-            [key]: isNaN(parsedValue) ? undefined : parsedValue,
+            [key]: Number.isNaN(parsedValue) ? undefined : parsedValue,
           };
         } else {
           return {
@@ -320,13 +330,20 @@ export const FieldAdvancedSettings = forwardRef<HTMLDivElement, FieldAdvancedSet
                 handleErrors={setErrors}
               />
             ))
+            .with(FieldType.ATTACHMENT, () => (
+              <AttachmentFieldAdvancedSettings
+                fieldState={fieldState}
+                handleFieldChange={handleFieldChange}
+                handleErrors={setErrors}
+              />
+            ))
             .otherwise(() => null)}
 
           {errors.length > 0 && (
             <div className="mt-4">
               <ul>
                 {errors.map((error, index) => (
-                  <li className="text-destructive text-sm" key={index}>
+                  <li className="text-red-500 text-sm" key={index}>
                     {error}
                   </li>
                 ))}

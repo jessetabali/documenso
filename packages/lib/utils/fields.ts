@@ -28,7 +28,7 @@ export const validateFieldsInserted = (fields: Field[]): boolean => {
 
   const uninsertedFields = sortFieldsByPosition(fields.filter((field) => !field.inserted));
 
-  // All fields are inserted — clear the validation signal.
+  // All fields are inserted, clear the validation signal.
   if (uninsertedFields.length === 0) {
     pdfContent?.removeAttribute('data-validate-fields');
     return true;
@@ -53,7 +53,7 @@ export const validateFieldsInserted = (fields: Field[]): boolean => {
     if (firstUninsertedFieldElement) {
       firstUninsertedFieldElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else {
-      // Field not in DOM (page virtualized away) — signal the PDF viewer to
+      // Field not in DOM (page virtualized away), signal the PDF viewer to
       // scroll to the correct page via the data attribute.
       if (pdfContent) {
         pdfContent.setAttribute('data-scroll-to-page', String(firstUninsertedField.page));
@@ -130,5 +130,6 @@ export const getClientSideFieldTranslations = ({ t }: I18n): Record<FieldType, s
     [FieldType.NUMBER]: t(msg`Number`),
     [FieldType.DATE]: t(msg`Date`),
     [FieldType.EMAIL]: t(msg`Email`),
+    [FieldType.ATTACHMENT]: t(msg`Attachment Upload`),
   };
 };

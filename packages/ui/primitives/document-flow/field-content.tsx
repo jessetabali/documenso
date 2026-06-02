@@ -165,6 +165,10 @@ export const FieldContent = ({ field, documentMeta }: FieldIconProps) => {
     if (isSignatureField && field.signature?.typedSignature) {
       textToDisplay = field.signature.typedSignature;
     }
+
+    if (field.type === FieldType.ATTACHMENT) {
+      textToDisplay = 'Attachment uploaded';
+    }
   }
 
   const textAlign = fieldMeta && 'textAlign' in fieldMeta ? fieldMeta.textAlign : 'left';

@@ -24,6 +24,8 @@ import { DateTime } from 'luxon';
 import { match, P } from 'ts-pattern';
 import { z } from 'zod';
 
+import { ZAttachmentFieldValueSchema } from './attachment-field';
+
 export type ExtractFieldInsertionValuesOptions = {
   fieldValue: TSignEnvelopeFieldValue;
   field: Field;
@@ -246,6 +248,27 @@ export const extractFieldInsertionValues = ({
 
       return {
         customText: '',
+        inserted: true,
+      };
+    })
+    .with({ type: FieldType.ATTACHMENT }, (fieldValue) => {
+      if (!fieldValue.value) {
+        return {
+          customText: '',
+          inserted: false,
+        };
+      }
+
+      const parsedAttachmentValue = ZAttachmentFieldValueSchema.safeParse(fieldValue.value);
+
+      if (!parsedAttachmentValue.success) {
+        throw new AppError(AppErrorCode.INVALID_BODY, {
+          message: 'Invalid attachment value',
+        });
+      }
+
+      return {
+        customText: parsedAttachmentValue.data,
         inserted: true,
       };
     })
