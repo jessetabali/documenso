@@ -37,8 +37,7 @@ export default function EnvelopeEditorPage({ params }: Route.ComponentProps) {
   );
 
   /**
-   * Need to handle redirecting to legacy editor on the client side to reduce server
-   * requests for the majority use case.
+   * Redirect users away from envelopes that belong to another team.
    */
   useEffect(() => {
     if (!envelope) {
@@ -50,12 +49,10 @@ export default function EnvelopeEditorPage({ params }: Route.ComponentProps) {
 
     if (envelope.teamId !== team.id) {
       void navigate(pathPrefix, { replace: true });
-    } else if (envelope.internalVersion !== 2) {
-      void navigate(`${pathPrefix}/${envelope.id}/legacy_editor`, { replace: true });
     }
   }, [envelope, team, navigate]);
 
-  if (envelope && (envelope.teamId !== team.id || envelope.internalVersion !== 2)) {
+  if (envelope && envelope.teamId !== team.id) {
     return (
       <div className="flex h-screen w-screen flex-col items-center justify-center gap-2 text-foreground">
         <Spinner />
@@ -88,6 +85,31 @@ export default function EnvelopeEditorPage({ params }: Route.ComponentProps) {
           <Button asChild>
             <Link to={`/t/${team.url}/documents`}>
               <Trans>Go home</Trans>
+            </Link>
+          </Button>
+        }
+      />
+    );
+  }
+
+  if (envelope.internalVersion !== 2) {
+    const pathPrefix =
+      envelope.type === EnvelopeType.DOCUMENT ? formatDocumentsPath(team.url) : formatTemplatesPath(team.url);
+
+    return (
+      <GenericErrorLayout
+        errorCode={410}
+        errorCodeMap={{
+          410: {
+            heading: msg`Legacy editor unavailable`,
+            subHeading: msg`410 Gone`,
+            message: msg`The legacy document and template builder has been removed from this fork. Create or edit documents with the V2 envelope editor instead.`,
+          },
+        }}
+        primaryButton={
+          <Button asChild>
+            <Link to={`${pathPrefix}/${envelope.id}`}>
+              <Trans>View document</Trans>
             </Link>
           </Button>
         }
