@@ -34,7 +34,7 @@ import { useEmbedSigningContext } from '~/components/embed/embed-signing-context
 import { EnvelopeSignerPageRenderer } from '~/components/general/envelope-signing/envelope-signer-page-renderer';
 import { EnvelopePdfViewer } from '~/components/general/pdf-viewer/envelope-pdf-viewer';
 import PDFViewerLazy from '~/components/general/pdf-viewer/pdf-viewer-lazy';
-
+import { PublicLegalLinks } from '~/components/general/public-legal-links';
 import { BrandingLogo } from '../branding-logo';
 import { DocumentSigningAttachmentsPopover } from '../document-signing/document-signing-attachments-popover';
 import { EnvelopeItemSelector } from '../envelope-editor/envelope-file-selector';
@@ -274,6 +274,8 @@ export const DocumentSigningPageViewV2 = () => {
                   </Button>
                 </div>
               )}
+
+              {!isEmbed && <PublicLegalLinks className="mt-4 justify-start px-4 pt-4" />}
             </div>
           </div>
         </div>

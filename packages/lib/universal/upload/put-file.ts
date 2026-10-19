@@ -1,10 +1,6 @@
-import { env } from '@documenso/lib/utils/env';
-import type { TGetPresignedPostUrlResponse, TUploadPdfResponse } from '@documenso/remix/server/api/files/files.types';
-import { DocumentDataType } from '@prisma/client';
-import { base64 } from '@scure/base';
-import { match } from 'ts-pattern';
+import type { TUploadPdfResponse } from '@documenso/remix/server/api/files/files.types';
 
-import { NEXT_PUBLIC_WEBAPP_URL } from '../../constants/app';
+import { formatPath } from '../../constants/app';
 import { AppError } from '../../errors/app-error';
 
 type File = {
@@ -13,7 +9,27 @@ type File = {
   arrayBuffer: () => Promise<ArrayBuffer>;
 };
 
-export const putPdfFile = async (file: File) => {
+/**
+ * Options for uploads that are not authorized by a logged-in session.
+ *
+ * Embedded authoring flows run cross-origin without a session cookie, so they
+ * must authorize uploads with their embedding presign token instead.
+ */
+export type PutFileOptions = {
+  presignToken?: string;
+};
+
+const buildUploadAuthHeaders = (options?: PutFileOptions): Record<string, string> => {
+  if (!options?.presignToken) {
+    return {};
+  }
+
+  return {
+    Authorization: `Bearer ${options.presignToken}`,
+  };
+};
+
+export const putPdfFile = async (file: File, options?: PutFileOptions) => {
   const formData = new FormData();
 
   // Create a proper File object from the data
@@ -23,8 +39,9 @@ export const putPdfFile = async (file: File) => {
 
   formData.append('file', properFile);
 
-  const response = await fetch('/api/files/upload-pdf', {
+  const response = await fetch(formatPath('/api/files/upload-pdf'), {
     method: 'POST',
+    headers: buildUploadAuthHeaders(options),
     body: formData,
   });
 
