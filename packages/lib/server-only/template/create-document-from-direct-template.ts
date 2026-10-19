@@ -321,12 +321,18 @@ export const createDocumentFromDirectTemplate = async ({
       }
 
       if (templateField.type === FieldType.ATTACHMENT) {
-        await validateAttachmentFieldValue({
-          value: customText ?? '',
-          envelopeId: templateField.envelopeId,
-          fieldId: templateField.id,
-          recipientId: templateField.recipientId,
-        });
+        if (customText) {
+          await validateAttachmentFieldValue({
+            value: customText,
+            envelopeId: templateField.envelopeId,
+            fieldId: templateField.id,
+            recipientId: templateField.recipientId,
+          });
+        } else if (isRequiredField(templateField)) {
+          throw new AppError(AppErrorCode.INVALID_BODY, {
+            message: 'Invalid, missing or changed fields',
+          });
+        }
       }
 
       if (isSignatureField && !signatureImageAsBase64 && !typedSignature) {

@@ -77,7 +77,7 @@ export const putAttachmentFieldPdfFile = async ({
   formData.append('file', properFile);
 
   const response = await fetch(
-    `/api/files/token/${token}/envelope/${envelopeId}/field/${fieldId}/attachment/upload-pdf`,
+    formatPath(`/api/files/token/${token}/envelope/${envelopeId}/field/${fieldId}/attachment/upload-pdf`),
     {
       method: 'POST',
       body: formData,
@@ -92,68 +92,4 @@ export const putAttachmentFieldPdfFile = async ({
   const result: TUploadPdfResponse = await response.json();
 
   return result;
-};
-
-/**
- * Uploads a file to the appropriate storage location.
- */
-export const putFile = async (file: File) => {
-  const NEXT_PUBLIC_UPLOAD_TRANSPORT = env('NEXT_PUBLIC_UPLOAD_TRANSPORT');
-
-  return await match(NEXT_PUBLIC_UPLOAD_TRANSPORT)
-    .with('s3', async () => putFileInObjectStorage(file, {}))
-    .with('azure-blob', async () => putFileInObjectStorage(file, { 'x-ms-blob-type': 'BlockBlob' }))
-    .otherwise(async () => putFileInDatabase(file));
-};
-
-const putFileInDatabase = async (file: File) => {
-  const contents = await file.arrayBuffer();
-
-  const binaryData = new Uint8Array(contents);
-
-  const asciiData = base64.encode(binaryData);
-
-  return {
-    type: DocumentDataType.BYTES_64,
-    data: asciiData,
-  };
-};
-
-const putFileInObjectStorage = async (file: File, extraHeaders: Record<string, string>) => {
-  const getPresignedUrlResponse = await fetch(`${NEXT_PUBLIC_WEBAPP_URL()}/api/files/presigned-post-url`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      fileName: file.name,
-      contentType: file.type,
-    }),
-  });
-
-  if (!getPresignedUrlResponse.ok) {
-    throw new Error(`Failed to get presigned post url, failed with status code ${getPresignedUrlResponse.status}`);
-  }
-
-  const { url, key }: TGetPresignedPostUrlResponse = await getPresignedUrlResponse.json();
-
-  const body = await file.arrayBuffer();
-
-  const response = await fetch(url, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/octet-stream',
-      ...extraHeaders,
-    },
-    body,
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to upload file "${file.name}", failed with status code ${response.status}`);
-  }
-
-  return {
-    type: DocumentDataType.S3_PATH,
-    data: key,
-  };
 };

@@ -172,10 +172,10 @@ export const DocumentSigningAttachmentField = ({
 
       if (onUnsignField) {
         await onUnsignField(payload);
-        return;
+      } else {
+        await removeSignedFieldWithToken(payload);
+        await revalidate();
       }
-
-      await removeSignedFieldWithToken(payload);
 
       setLocalFileName(null);
       setFileError(null);
@@ -183,8 +183,6 @@ export const DocumentSigningAttachmentField = ({
       if (inputRef.current) {
         inputRef.current.value = '';
       }
-
-      await revalidate();
     } catch (err) {
       console.error(err);
 
