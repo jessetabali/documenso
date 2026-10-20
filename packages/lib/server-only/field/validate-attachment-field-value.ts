@@ -4,10 +4,11 @@ import { AppError, AppErrorCode } from '../../errors/app-error';
 import { getAttachmentFieldDocumentDataId } from '../../utils/attachment-field';
 
 type ValidateAttachmentFieldValueOptions = {
-  value: string;
+  value: string | null | undefined;
   envelopeId: string;
   fieldId: number;
   recipientId: number;
+  required?: boolean;
 };
 
 export const validateAttachmentFieldValue = async ({
@@ -15,7 +16,19 @@ export const validateAttachmentFieldValue = async ({
   envelopeId,
   fieldId,
   recipientId,
+  required = false,
 }: ValidateAttachmentFieldValueOptions) => {
+  // If no value is provided (e.g. optional or unfilled field during document creation)
+  if (!value || value.trim() === '') {
+    if (!required) {
+      return { documentDataId: null };
+    }
+
+    throw new AppError(AppErrorCode.INVALID_BODY, {
+      message: 'Invalid attachment value',
+    });
+  }
+
   const documentDataId = getAttachmentFieldDocumentDataId(value);
 
   if (!documentDataId) {
